@@ -10,7 +10,7 @@
 	
 	<properties>
 		<docker.image.prefix>kammana</docker.image.prefix>
-		<sonar.host.url>https://42a46a69-2232-42bc-8d44-426a79d30769-10-244-8-98-9000.papa.r.killercoda.com/</sonar.host.url>
+		<sonar.host.url>eb8b6ad-d60a-4a75-b15e-33bd2ab491ad-10-244-6-31-9000.papa.r.killercoda.com/</sonar.host.url>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
                 <maven.compiler.source>1.7</maven.compiler.source>
                 <maven.compiler.target>1.7</maven.compiler.target>
