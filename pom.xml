@@ -26,6 +26,7 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
+		
 
 	</dependencies>
 	
@@ -48,6 +49,17 @@
 		<url>http://repo1.maven.org/maven2</url>
 	    </pluginRepository>
 	</pluginRepositories>
+	<build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>3.3.1</version>
+        </plugin>
+        <!-- Other plugins -->
+    </plugins>
+</build>
+
 
 	
 </project>
