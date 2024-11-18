@@ -1,5 +1,5 @@
 pipeline{
-    agent any
+    agent madhu-node
      tools {
         maven 'Maven-3.6.1'
     }
