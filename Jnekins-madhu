@@ -1,6 +1,8 @@
-pipeline{
-    agent madhu-node
-     tools {
+pipeline {
+    agent {
+        label 'madhu-node'
+    }
+    tools {
         maven 'Maven-3.6.1'
     }
     
