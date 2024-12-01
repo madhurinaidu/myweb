@@ -52,6 +52,17 @@ pipeline {
                     sh "docker login -u madhurinaidu -p ${DOCKER_HUB_CREDENTIALS}"
                 }
 
+
+/*
+ steps {
+                // Retrieve Docker Hub credentials from Jenkins' Credentials store
+                withCredentials([usernamePassword(credentialsId: 'DOCKER_HUB_CREDENTIALS', 
+                                                   usernameVariable: 'DOCKER_USER', 
+                                                   passwordVariable: 'DOCKER_PASS')]) {
+                    // Docker login using the retrieved credentials
+                    sh 'docker login -u $DOCKER_USER -p $DOCKER_PASS'
+                }*/
+
                 // Push the Docker image to Docker Hub
                 sh 'docker push madhurinaidu/spring1'
                 
