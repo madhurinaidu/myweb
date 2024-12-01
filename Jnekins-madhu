@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'madhu-node'
+        label 'docker-slve'
     }
     tools {
         maven 'Maven-3.6.1'
