@@ -26,6 +26,10 @@ pipeline {
         stage('Build Docker Image'){
             steps{
                  sh 'docker  build  -t madhurinaidu/spring1 .'
+                 sh 'docker build -t tomcat:${BUILD_NUMBER} .'
+                 sh 'docker run -itd --name srini30 -p 3900:8080 tomcat:${BUILD_NUMBER}'
+
+                 
                  
                 
              }
