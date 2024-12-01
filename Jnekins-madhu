@@ -6,47 +6,73 @@ pipeline {
         maven 'Maven-3.6.1'
     }
     
-    environment{
-    
+    environment {
         PATH = "/opt/maven3/bin:$PATH"
     }
-    stages{
-        stage("Git Checkout"){
-            steps{
+    
+    stages {
+        stage("Git Checkout") {
+            steps {
                 git credentialsId: 'git-credentials', url: 'https://github.com/madhurinaidu/myweb.git'
             }
         }
-        stage("Maven Build"){
-            steps{
+
+        stage("Maven Build") {
+            steps {
                 sh "mvn clean package"
-                
             }
         }
-        
-        stage('Build Docker Image'){
-            steps{
-                 sh 'docker  build  -t madhurinaidu/spring1 .'
-                 sh 'docker build -t tomcat:${BUILD_NUMBER} .'
-                 sh 'docker run -itd --name srini30 -p 3900:8080 tomcat:${BUILD_NUMBER}'
 
-                 
-                 
+        stage('Build Docker Image') {
+            steps {
+                // Check if the container exists, stop and remove it if necessary
+                script {
+                    def containerExists = sh(script: 'docker ps -a --filter "name=srini30" --format "{{.Names}}"', returnStdout: true).trim()
+                    if (containerExists == 'srini30') {
+                        sh 'docker stop srini30'
+                        sh 'docker rm srini30'
+                    }
+                }
+
+                // Build the Docker image with the appropriate tag
+                sh 'docker build -t madhurinaidu/spring1 .'
                 
-             }
-
-         }
- stage('Push Docker Image'){
-             steps{
-                  withCredentials([string(credentialsId: 'DOCKER_HUB_CREDENTIALS', variable: 'DOCKER_HUB_CREDENTIALS')]) {
-                      sh "docker login -u madhurinaidu -p ${DOCKER_HUB_CREDENTIALS}"
+                // Optional: You can also build with a dynamic tag (using the BUILD_NUMBER)
+                sh 'docker build -t tomcat:${BUILD_NUMBER} .'
+                
+                // Run the Docker container (for testing or validation)
+                sh 'docker run -itd --name srini30 -p 3900:8080 tomcat:${BUILD_NUMBER}'
             }
-            sh 'docker push madhurinaidu/spring1'
         }
-      }
 
+        stage('Push Docker Image') {
+            steps {
+                // Authenticate with Docker Hub using credentials stored in Jenkins
+                withCredentials([string(credentialsId: 'DOCKER_HUB_CREDENTIALS', variable: 'DOCKER_HUB_CREDENTIALS')]) {
+                    sh "docker login -u madhurinaidu -p ${DOCKER_HUB_CREDENTIALS}"
+                }
 
-       
-        
-        
+                // Push the Docker image to Docker Hub
+                sh 'docker push madhurinaidu/spring1'
+                
+                // If the push fails, handle the container cleanup
+                script {
+                    if (currentBuild.result != 'SUCCESS') {
+                        echo "Push failed, removing the container..."
+                        sh 'docker stop srini30'
+                        sh 'docker rm srini30'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Cleanup in case the pipeline ends prematurely or fails
+            echo "Cleaning up any remaining containers..."
+            sh 'docker stop srini30 || true'
+            sh 'docker rm srini30 || true'
+        }
     }
 }
