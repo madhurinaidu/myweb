@@ -33,12 +33,12 @@
 	<distributionManagement>
 		 <snapshotRepository>
 		    <id>nexusRepo</id>
-		    <url>http://54.144.149.216:8081/repository/sample-snapshot/</url>
+		    <url>http://54.90.234.39:8081/repository/madhu-release/</url>
 		 </snapshotRepository>
 		
 		<repository>
 		    <id>nexusRepo</id>
-		    <url>http://54.144.149.216:8081/repository/sample-release/</url>
+		    <url>http://54.90.234.39:8081/repository/madhu-snapshot/</url>
 		</repository>
   	</distributionManagement>
 	
